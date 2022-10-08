@@ -34,14 +34,44 @@
   <title>Gonzalo Recio Website</title>
   <link rel="manifest" href="manifest.json">
 
+  <style>
+      .container {
+        background-color: #42407c;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .indicator{
+        background-color: #42407c;
+        width: 15vw;
+      }
+      .text{
+      color:#FFFFFF;
+      font-family: Helvetica, sans-serif;
+      }
+
+      img{
+      max-width:10%;
+      }
+
+  </style>
+
   <script>
     // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = '2073228272';
+    var serviceWorkerVersion = '4101350081';
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
+<div id="loading_indicator" class="container">
+  <img class="indicator" src="../images/Spin-1s-200px.gif"   />
+  <b class="text">Loading...</b>
+</div>
+
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
