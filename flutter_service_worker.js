@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "106f0d575a388ae1e94eb28dd2ab2b5c",
+  "assets/AssetManifest.json": "4b05e822d4abe2f591039d7b2eff4eef",
 "assets/FontManifest.json": "5a32d4310a6f5d9a6b651e75ba0d7372",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
 "assets/images/alz1.png": "41dc9a4020a17223e508a49de4f44033",
@@ -64,6 +64,7 @@ const RESOURCES = {
 "assets/images/dummy.jpg": "17505a71b408e6f42b86de2309f64768",
 "assets/images/GitHub-Mark.png": "1fbf1eeb622038a1ea2e62036d33788a",
 "assets/images/guiparser.png": "cd65e90245c95162850ba6b81b577788",
+"assets/images/kanji-shadow.png": "27fef77ea4e9f6ccb4dee7b4dc168571",
 "assets/images/ko-fi.png": "8eaba1332a92cf38c8f2e9a4121bbe97",
 "assets/images/mail.png": "1526884e77cf35e3f998d14bd784957e",
 "assets/images/mpml1.png": "d13066a2a97e27d314c8cce631cd9a9a",
@@ -101,24 +102,25 @@ const RESOURCES = {
 "assets/images/tumor.png": "30677f796228fbadeda08e241dc8c302",
 "assets/images/volcamod.jpg": "dba4785dd1bfac129c57331891c997d6",
 "assets/images/zoiacheat.png": "ffa5fb7eb1f0ce04b8bc429491d5cbb2",
-"assets/NOTICES": "986dcd20ab79d6cca805c554f489484e",
+"assets/NOTICES": "3f288ff9fa3219d705fe3b59d41ee6b0",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-brands-400.ttf": "4e20cb87b0d43808c49449ffd69b1a74",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-regular-400.ttf": "1f7cb220b3f5309130bd6d9ad87e0fc0",
 "assets/packages/font_awesome_flutter/lib/fonts/fa-solid-900.ttf": "26f5af2d93473531f82ef5060f9c6d45",
-"canvaskit/canvaskit.js": "c2b4e5f3d7a3d82aed024e7249a78487",
-"canvaskit/canvaskit.wasm": "4b83d89d9fecbea8ca46f2f760c5a9ba",
-"canvaskit/profiling/canvaskit.js": "ae2949af4efc61d28a4a80fffa1db900",
-"canvaskit/profiling/canvaskit.wasm": "95e736ab31147d1b2c7b25f11d4c32cd",
+"assets/shaders/ink_sparkle.frag": "6333b551ea27fd9d8e1271e92def26a9",
+"canvaskit/canvaskit.js": "2bc454a691c631b07a9307ac4ca47797",
+"canvaskit/canvaskit.wasm": "bf50631470eb967688cca13ee181af62",
+"canvaskit/profiling/canvaskit.js": "38164e5a72bdad0faa4ce740c9b8e564",
+"canvaskit/profiling/canvaskit.wasm": "95a45378b69e77af5ed2bc72b2209b94",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"flutter.js": "eb2682e33f25cd8f1fc59011497c35f8",
+"flutter.js": "f85e6fb278b0fd20c349186fb46ae36d",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "86f805a6550dcc9509596e34a5f22019",
-"/": "86f805a6550dcc9509596e34a5f22019",
-"main.dart.js": "bfc73a73455bd3015f15e8de0be30587",
+"index.html": "2828b269724b570ed5a1d8a5e77f16ee",
+"/": "2828b269724b570ed5a1d8a5e77f16ee",
+"main.dart.js": "71fd2a4a4c6d84a08fa7306e61508297",
 "manifest.json": "a9394ce9103fe5a4d8ec39278d2f1fb4",
 "version.json": "5643964ff6d0f98106adbdc1e2d7ed75"
 };
@@ -128,7 +130,6 @@ const RESOURCES = {
 const CORE = [
   "main.dart.js",
 "index.html",
-"assets/NOTICES",
 "assets/AssetManifest.json",
 "assets/FontManifest.json"];
 // During install, the TEMP cache is populated with the application shell files.
@@ -227,9 +228,11 @@ self.addEventListener("fetch", (event) => {
     .then((cache) =>  {
       return cache.match(event.request).then((response) => {
         // Either respond with the cached resource, or perform a fetch and
-        // lazily populate the cache.
+        // lazily populate the cache only if the resource was successfully fetched.
         return response || fetch(event.request).then((response) => {
-          cache.put(event.request, response.clone());
+          if (response && Boolean(response.ok)) {
+            cache.put(event.request, response.clone());
+          }
           return response;
         });
       })
